@@ -29,7 +29,7 @@ const AddCoffee = () => {
       });
   };
   return (
-    <div className="p-10 md:p-24 bg-[#F4F3F0] border-base-300 rounded-xl border shadow-lg mt-10">
+    <div className="p-10 md:p-24 bg-[#F4F3F0] border-base-300 rounded-xl border shadow-lg mt-30">
       <div className="text-center space-y-4 mb-5">
         <h1 className="text-5xl font-bold rancho-regular">Add New Coffee</h1>
         <p className="text-gray-600 md:w-3/4 mx-auto">

@@ -1,14 +1,22 @@
 import React from "react";
 import { Outlet } from "react-router";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
+import Navbar from "../components/Navbar";
+import Hero from "../components/Hero";
 
 const MainLayout = () => {
   return (
     <div>
-      <Header></Header>
-      <div className="max-w-7xl mx-auto">
+      {/* <Header></Header> */}
+      <div>
+        <Navbar></Navbar>
+        {/* <Hero></Hero> */}
+      </div>
+      <div>
         <Outlet></Outlet>
       </div>
+      <Footer></Footer>
     </div>
   );
 };
