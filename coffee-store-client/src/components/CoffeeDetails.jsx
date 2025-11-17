@@ -8,7 +8,7 @@ const CoffeeDetails = () => {
   const { _id, name, supplier, price, Quantity, taste, details, photo } = data;
   return (
     <div>
-      <div className="card card-side bg-[#F5F4F1] shadow-sm max-w-[80%] mx-auto mt-5">
+      <div className="card card-side bg-[#F5F4F1] shadow-sm max-w-[80%] mx-auto mt-30">
         <figure className="ml-[15%]">
           <img src={photo} alt="coffee" className="w-[250px] h-[420px]" />
         </figure>
@@ -40,9 +40,6 @@ const CoffeeDetails = () => {
             <span className="font-bold">Details : </span>
             {details}
           </h5>
-        </div>
-        <div>
-          <h5 className="">Follow Us Now</h5>
         </div>
       </div>
     </div>
