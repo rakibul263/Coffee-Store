@@ -19,6 +19,9 @@ const Navbar = () => {
           <Link to="/addCoffee" className="hover:text-[#D2B48C]">
             Add Coffee
           </Link>
+          <Link to="/users" className="hover:text-[#D2B48C]">
+            Users
+          </Link>
           <Link to="/menu" className="hover:text-[#D2B48C]">
             Menu
           </Link>
@@ -27,20 +30,11 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="hidden md:flex gap-4">
-          <Link to="https://www.facebook.com/">
-            <FaFacebook
-              size={20}
-              className="hover:text-blue-500 duration-200"
-            />
-          </Link>
-          <Link to="https://github.com/">
-            <FaGithub size={20} className="hover:text-gray-300 duration-200" />
-          </Link>
-          <Link to="https://www.linkedin.com/">
-            <FaLinkedin
-              size={20}
-              className="hover:text-blue-400 duration-200"
-            />
+          <Link
+            to="/signup"
+            className="btn btn-active hover:bg-[#331A15] hover:text-white"
+          >
+            SignUp
           </Link>
         </div>
       </div>
