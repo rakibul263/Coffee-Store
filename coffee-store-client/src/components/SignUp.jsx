@@ -121,12 +121,15 @@ const SignUp = () => {
       <button className="rancho-regular btn bg-[#331A15] text-white text-2xl font-bold mt-4">
         SignUp
       </button>
-      <Link to="#">
+      <p>
         Already Have an account?{" "}
-        <span className="hover:text-green-500 hover:underline">
+        <Link
+          to="/signin"
+          className="hover:text-green-500 hover:underline font-bold"
+        >
           Please Login
-        </span>
-      </Link>
+        </Link>
+      </p>
       <button className="btn bg-white text-black border-[#e5e5e5] text-2xl rancho-regular">
         <svg
           aria-label="Google logo"

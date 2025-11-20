@@ -88,7 +88,7 @@ const Users = () => {
                   <br />
                   <div className="text-sm opacity-50">{user.phone}</div>
                 </td>
-                <td>{user.creationTime}</td>
+                <td>{user.lastSignInTime}</td>
                 <th className="space-x-4">
                   <button className="color-[#331A15] hover:cursor-pointer">
                     <FaEdit size={20} />
