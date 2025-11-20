@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import logo from "../assets/more/logo1.png";
-import { FaFacebook, FaLinkedin } from "react-icons/fa6";
-import { FaGithub } from "react-icons/fa";
 import { Link } from "react-router";
+import { FaBars, FaTimes } from "react-icons/fa";
 
 const Navbar = () => {
+  const [open, setOpen] = useState(false);
+
   return (
     <nav className="fixed top-0 left-0 w-full bg-[#331A15]/90 text-white shadow-lg z-50">
       <div className="max-w-6xl mx-auto flex justify-between items-center px-6 py-3">
@@ -29,7 +30,7 @@ const Navbar = () => {
             Contact
           </Link>
         </div>
-        <div className="hidden md:flex gap-4">
+        <div className="hidden md:flex">
           <Link
             to="/signup"
             className="btn btn-active hover:bg-[#331A15] hover:text-white"
@@ -37,6 +38,58 @@ const Navbar = () => {
             SignUp
           </Link>
         </div>
+        <button onClick={() => setOpen(!open)} className="md:hidden text-2xl">
+          {open ? <FaTimes /> : <FaBars />}
+        </button>
+      </div>
+      <div
+        className={`md:hidden bg-[#331A15]/95 text-white px-6 py-4 space-y-4 font-semibold transition-all duration-300 ${
+          open ? "max-h-96 opacity-100" : "max-h-0 opacity-0 overflow-hidden"
+        }`}
+      >
+        <Link
+          onClick={() => setOpen(false)}
+          to="/"
+          className="block hover:text-[#D2B48C]"
+        >
+          Home
+        </Link>
+        <Link
+          onClick={() => setOpen(false)}
+          to="/addCoffee"
+          className="block hover:text-[#D2B48C]"
+        >
+          Add Coffee
+        </Link>
+        <Link
+          onClick={() => setOpen(false)}
+          to="/users"
+          className="block hover:text-[#D2B48C]"
+        >
+          Users
+        </Link>
+        <Link
+          onClick={() => setOpen(false)}
+          to="/menu"
+          className="block hover:text-[#D2B48C]"
+        >
+          Menu
+        </Link>
+        <Link
+          onClick={() => setOpen(false)}
+          to="/contact"
+          className="block hover:text-[#D2B48C]"
+        >
+          Contact
+        </Link>
+
+        <Link
+          onClick={() => setOpen(false)}
+          to="/signup"
+          className="inline-block btn btn-active hover:bg-[#331A15] hover:text-white"
+        >
+          SignUp
+        </Link>
       </div>
     </nav>
   );

@@ -7,9 +7,8 @@ const AddCoffee = () => {
     const form = e.target;
     const formData = new FormData(form);
     const newCoffee = Object.fromEntries(formData.entries());
-    console.log(newCoffee);
 
-    fetch("http://localhost:3000/coffees", {
+    fetch("https://coffee-store-server-omega-five.vercel.app/coffees", {
       method: "POST",
       headers: {
         "content-type": "application/json",
@@ -22,24 +21,29 @@ const AddCoffee = () => {
           Swal.fire({
             title: "Coffee Added Successfully!",
             icon: "success",
-            draggable: true,
           });
           form.reset();
         }
       });
   };
+
   return (
-    <div className="p-10 md:p-24 bg-[#F4F3F0] border-base-300 rounded-xl border shadow-lg mt-30 max-w-[80%] mx-auto">
-      <div className="text-center space-y-4 mb-5">
-        <h1 className="text-5xl font-bold rancho-regular">Add New Coffee</h1>
-        <p className="text-gray-600 md:w-3/4 mx-auto">
+    <div className="px-5 py-10 md:p-16 bg-[#F4F3F0] border border-base-300 rounded-xl shadow-lg mt-28 max-w-5xl mx-auto">
+      {/* Header */}
+      <div className="text-center space-y-4 mb-8">
+        <h1 className="text-3xl md:text-5xl font-bold rancho-regular">
+          Add New Coffee
+        </h1>
+        <p className="text-gray-600 md:w-3/4 mx-auto text-sm md:text-base">
           Add your favorite coffee details to store in the database. Fill all
-          the required information carefully and submit the form to save the
-          coffee data.
+          the information carefully.
         </p>
       </div>
-      <form className="max-w-5xl mx-auto" onSubmit={handleSubmit}>
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-6">
+
+      {/* Form */}
+      <form onSubmit={handleSubmit}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Column 1 */}
           <fieldset className="space-y-3">
             <label className="label font-semibold">Name</label>
             <input
@@ -47,6 +51,7 @@ const AddCoffee = () => {
               className="input input-bordered w-full"
               name="name"
               placeholder="Enter coffee name"
+              required
             />
 
             <label className="label font-semibold">Supplier</label>
@@ -55,24 +60,28 @@ const AddCoffee = () => {
               className="input input-bordered w-full"
               name="supplier"
               placeholder="Enter coffee supplier"
+              required
             />
 
             <label className="label font-semibold">Price</label>
             <input
-              type="text"
+              type="number"
               className="input input-bordered w-full"
               name="price"
               placeholder="Enter coffee price"
+              required
             />
           </fieldset>
 
+          {/* Column 2 */}
           <fieldset className="space-y-3">
             <label className="label font-semibold">Quantity</label>
             <input
-              type="text"
+              type="number"
               className="input input-bordered w-full"
               name="Quantity"
-              placeholder="Enter Coffee Quantity"
+              placeholder="Enter coffee quantity"
+              required
             />
 
             <label className="label font-semibold">Taste</label>
@@ -81,29 +90,35 @@ const AddCoffee = () => {
               className="input input-bordered w-full"
               name="taste"
               placeholder="Enter coffee taste"
+              required
             />
+
             <label className="label font-semibold">Details</label>
             <input
               type="text"
               className="input input-bordered w-full"
               name="details"
               placeholder="Enter coffee details"
+              required
             />
           </fieldset>
 
-          <fieldset className="col-span-2">
+          {/* Photo URL */}
+          <fieldset className="col-span-1 md:col-span-2">
             <label className="label font-semibold">Photo URL</label>
             <input
               type="text"
               className="input input-bordered w-full mt-2"
               name="photo"
-              placeholder="Enter coffee photo URL"
+              placeholder="Enter photo URL"
+              required
             />
           </fieldset>
         </div>
 
-        <div className="text-center mt-8">
-          <button className="btn bg-[#D2B48C] px-10 text-lg w-full border-[#331A15] border-2">
+        {/* Button */}
+        <div className="text-center mt-10">
+          <button className="btn bg-[#D2B48C] text-lg border-[#331A15] border-2 w-full md:w-auto px-10">
             Add Coffee
           </button>
         </div>
