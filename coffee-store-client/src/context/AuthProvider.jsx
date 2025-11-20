@@ -10,6 +10,7 @@ const AuthProvider = ({ children }) => {
   const userInfo = {
     createUser,
   };
+
   return <AuthContext value={userInfo}>{children}</AuthContext>;
 };
 

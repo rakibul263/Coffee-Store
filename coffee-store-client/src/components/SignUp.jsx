@@ -39,6 +39,8 @@ const SignUp = () => {
                 title: "SignUp Successful!",
                 icon: "success",
                 draggable: true,
+              }).then(() => {
+                navigate("/");
               });
             }
           });
