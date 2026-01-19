@@ -30,7 +30,7 @@ const SignIn = () => {
           .then((res) => res.json())
           .then((data) => console.log(data));
 
-        navigate("/"); // Redirect after sign in
+        navigate("/");
       })
       .catch((error) => console.log(error));
 

@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import logo from "../assets/more/logo1.png";
 import { Link } from "react-router";
 import { FaBars, FaTimes } from "react-icons/fa";
+import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
+  const { user, logOut } = use(AuthContext);
   const [open, setOpen] = useState(false);
 
   return (
@@ -31,12 +33,22 @@ const Navbar = () => {
           </Link>
         </div>
         <div className="hidden md:flex">
-          <Link
-            to="/signup"
-            className="btn btn-active hover:bg-[#331A15] hover:text-white"
-          >
-            SignUp
-          </Link>
+          {user ? (
+            <button
+              onClick={logOut}
+              className="inline-block btn btn-active hover:bg-[#331A15] hover:text-white"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              onClick={() => setOpen(false)}
+              to="/signin"
+              className="btn btn-[white]"
+            >
+              LogIn
+            </Link>
+          )}
         </div>
         <button onClick={() => setOpen(!open)} className="md:hidden text-2xl">
           {open ? <FaTimes /> : <FaBars />}
@@ -81,14 +93,6 @@ const Navbar = () => {
           className="block hover:text-[#D2B48C]"
         >
           Contact
-        </Link>
-
-        <Link
-          onClick={() => setOpen(false)}
-          to="/signup"
-          className="inline-block btn btn-active hover:bg-[#331A15] hover:text-white"
-        >
-          SignUp
         </Link>
       </div>
     </nav>
