@@ -2,6 +2,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const express = require("express");
 const cors = require("cors");
 const app = express();
+const jwt = require("jsonwebtoken");
 const port = process.env.PORT || 3000;
 require("dotenv").config();
 
@@ -24,6 +25,14 @@ async function run() {
 
     const coffeeCollection = client.db("coffeeDB").collection("coffees");
     const userCollection = client.db("coffeeDB").collection("users");
+
+    // jwt token related api
+    app.post("/jwt", async (req, res) => {
+      const email = req.body.email;
+      const user = email;
+      const token = jwt.sign(user, "secret", { expiresIn: "1h" });
+      res.send({ token });
+    });
 
     // send data client to db
     app.post("/coffees", async (req, res) => {
@@ -58,7 +67,7 @@ async function run() {
       const result = await coffeeCollection.updateOne(
         filter,
         updateDoc,
-        options
+        options,
       );
       res.send(result);
     });
