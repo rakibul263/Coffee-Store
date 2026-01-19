@@ -27,7 +27,7 @@ const Users = () => {
           console.log(error);
         });
       if (result.isConfirmed) {
-        fetch(`https://coffee-store-server-omega-five.vercel.app/users/${id}`, {
+        fetch(`http://localhost:3000/users/${id}`, {
           method: "DELETE",
         })
           .then((res) => res.json())

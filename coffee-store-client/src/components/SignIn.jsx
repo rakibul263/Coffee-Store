@@ -22,7 +22,7 @@ const SignIn = () => {
           lastSignInTime: result.user?.metadata?.lastSignInTime,
         };
 
-        fetch("https://coffee-store-server-omega-five.vercel.app/users", {
+        fetch("http://localhost:3000/users", {
           method: "PATCH",
           headers: { "content-type": "application/json" },
           body: JSON.stringify(signInInfo),

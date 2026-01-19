@@ -14,7 +14,7 @@ const SignUp = () => {
     const form = e.target;
     const formData = new FormData(form);
     const { email, password, ...restFormData } = Object.fromEntries(
-      formData.entries()
+      formData.entries(),
     );
 
     createUser(email, password)
@@ -26,7 +26,7 @@ const SignUp = () => {
           lastSignInTime: result.user?.metadata?.lastSignInTime,
         };
 
-        fetch("https://coffee-store-server-omega-five.vercel.app/users", {
+        fetch("http://localhost:3000/users", {
           method: "POST",
           headers: { "content-type": "application/json" },
           body: JSON.stringify(userProfile),

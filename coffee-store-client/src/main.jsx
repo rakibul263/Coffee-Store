@@ -23,8 +23,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        loader: () =>
-          fetch("https://coffee-store-server-omega-five.vercel.app/coffees"),
+        loader: () => fetch("http://localhost:3000/coffees"),
         Component: Home,
       },
       {
@@ -42,17 +41,13 @@ const router = createBrowserRouter([
       {
         path: "coffeeDetails/:id",
         loader: ({ params }) =>
-          fetch(
-            `https://coffee-store-server-omega-five.vercel.app/coffees/${params.id}`
-          ),
+          fetch(`http://localhost:3000/coffees/${params.id}`),
         Component: CoffeeDetails,
       },
       {
         path: "updateCoffee/:id",
         loader: ({ params }) =>
-          fetch(
-            `https://coffee-store-server-omega-five.vercel.app/coffees/${params.id}`
-          ),
+          fetch(`http://localhost:3000/coffees/${params.id}`),
         Component: UpdateCoffee,
       },
       {
@@ -65,8 +60,7 @@ const router = createBrowserRouter([
       },
       {
         path: "users",
-        loader: () =>
-          fetch("https://coffee-store-server-omega-five.vercel.app/users"),
+        loader: () => fetch("http://localhost:3000/users"),
         Component: Users,
       },
       {
@@ -82,5 +76,5 @@ createRoot(document.getElementById("root")).render(
     <AuthProvider>
       <RouterProvider router={router}></RouterProvider>
     </AuthProvider>
-  </StrictMode>
+  </StrictMode>,
 );
