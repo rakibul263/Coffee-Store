@@ -3,11 +3,15 @@ const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-const app = express();
-const port = process.env.PORT || 3000;
 require("dotenv").config();
 
+const app = express();
+const port = process.env.PORT || 3000;
+
+// middleware
 app.use(express.json());
+app.use(cookieParser());
+
 app.use(
   cors({
     origin: ["http://localhost:5173"],
@@ -15,6 +19,31 @@ app.use(
   }),
 );
 
+// logger
+const logger = (req, res, next) => {
+  console.log("Request:", req.method, req.url);
+  next();
+};
+
+//  verify token
+const verifyToken = (req, res, next) => {
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.status(401).send({ message: "Unauthorized" });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(403).send({ message: "Forbidden" });
+    }
+
+    req.decoded = decoded;
+    next();
+  });
+};
+
+//mongodb
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.08bzjfv.mongodb.net/?appName=Cluster0`;
 
 const client = new MongoClient(uri, {
@@ -29,109 +58,114 @@ async function run() {
   try {
     await client.connect();
 
-    const coffeeCollection = client.db("coffeeDB").collection("coffees");
-    const userCollection = client.db("coffeeDB").collection("users");
+    const db = client.db("coffeeDB");
+    const coffeeCollection = db.collection("coffees");
+    const userCollection = db.collection("users");
 
-    // jwt token related api
-    app.post("/jwt", async (req, res) => {
-      const userData = req.body;
-      const token = jwt.sign(userData, process.env.JWT_ACCESS_SECRET, {
-        expiresIn: "1h",
-      });
-      // set token in the cookies.
-      res.cookie("token", token, {
-        httpOnly: true, // must
-        secure: true,
-        sameSite: true,
-      });
+    console.log("MongoDB Connected Successfully!");
 
-      res.send({ success: true });
+    // jwt api
+    app.post("/jwt", (req, res) => {
+      const user = req.body;
+
+      if (!user.email)
+        return res.status(400).send({ message: "Email required" });
+
+      try {
+        const token = jwt.sign(user, process.env.JWT_SECRET, {
+          expiresIn: "1h",
+        });
+        res.cookie("token", token, {
+          httpOnly: true,
+          secure: false,
+          sameSite: "lax",
+        });
+        res.send({ success: true, token });
+      } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: "Server error" });
+      }
     });
 
-    // send data client to db
+    // coffee api
     app.post("/coffees", async (req, res) => {
-      const newCoffee = req.body;
-      const result = await coffeeCollection.insertOne(newCoffee);
+      const result = await coffeeCollection.insertOne(req.body);
       res.send(result);
     });
 
-    // get data from mongodb
     app.get("/coffees", async (req, res) => {
-      const cursor = coffeeCollection.find();
-      const result = await cursor.toArray();
+      const result = await coffeeCollection.find().toArray();
       res.send(result);
     });
 
     app.get("/coffees/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const result = await coffeeCollection.findOne(query);
+      const result = await coffeeCollection.findOne({
+        _id: new ObjectId(req.params.id),
+      });
       res.send(result);
     });
 
-    // update coffee details
     app.put("/coffee/:id", async (req, res) => {
-      const id = req.params.id;
-      const filter = { _id: new ObjectId(id) };
-      const options = { upsert: true };
-      const updatedCoffee = req.body;
-      const updateDoc = {
-        $set: updatedCoffee,
-      };
       const result = await coffeeCollection.updateOne(
-        filter,
-        updateDoc,
-        options,
+        { _id: new ObjectId(req.params.id) },
+        { $set: req.body },
+        { upsert: true },
       );
       res.send(result);
     });
 
-    // delete data from db
     app.delete("/coffees/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const result = await coffeeCollection.deleteOne(query);
+      const result = await coffeeCollection.deleteOne({
+        _id: new ObjectId(req.params.id),
+      });
       res.send(result);
     });
 
+    // user api
     app.post("/users", async (req, res) => {
-      const userProfile = req.body;
-      console.log(userProfile);
-      const result = await userCollection.insertOne(userProfile);
+      const result = await userCollection.insertOne(req.body);
       res.send(result);
     });
 
-    app.get("/users", async (req, res) => {
+    app.get("/users", logger, verifyToken, async (req, res) => {
+      const email = req.decoded.email;
+
+      if (!email) {
+        return res.status(403).send({ message: "Forbidden access" });
+      }
+
       const result = await userCollection.find().toArray();
       res.send(result);
     });
 
     app.patch("/users", async (req, res) => {
       const { email, lastSignInTime } = req.body;
-      const filter = { email: email };
-      const updatedDoc = { $set: { lastSignInTime: lastSignInTime } };
-      const result = await userCollection.updateOne(filter, updatedDoc);
+
+      const result = await userCollection.updateOne(
+        { email },
+        { $set: { lastSignInTime } },
+      );
+
       res.send(result);
     });
 
     app.delete("/users/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const result = await userCollection.deleteOne(query);
+      const result = await userCollection.deleteOne({
+        _id: new ObjectId(req.params.id),
+      });
       res.send(result);
     });
-
-    console.log("MongoDB Connected Successfully!");
   } catch (error) {
     console.error(error);
   }
 }
 run();
 
+// root api
 app.get("/", (req, res) => {
   res.send("Coffee Server is running...");
 });
 
 app.listen(port, () => {
-  console.log(`Coffee server is running port ${port}`);
+  console.log(`Coffee server is running on port ${port}`);
 });

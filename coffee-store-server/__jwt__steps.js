@@ -21,6 +21,8 @@
               withCredentials: true,
             })
 
+      or for fetch add options credentials: 'include'
+
   2. In the cors setting set credential and origin
       app.use(
         cors({
@@ -35,4 +37,14 @@
           secure: true,
           sameSite: true,
         });
+
+   4. use cookie parser as a middleware
+   5. In the client side: if using axios withCredential : true;
+      for fetch: credential Include.
+
+   -----------
+   1. verify token "jwt.verify()"
+
+
+
 */
